@@ -1,0 +1,71 @@
+<div class="row">
+<div class="col-md-2"></div>
+  <div class="col-md-8">
+
+    <h1><?=$vtitle?></h1>
+    <br>
+    <?php if ($user_profile == 1):?>
+        <a href="/backend/<?=$module?>/new" class="btn btn-info">Nueva <?=ucfirst($module)?></a>
+    <?php endif ?>
+    <br><br>
+    <table class="table data-table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <?php foreach($fields as $field):?>
+            <th><?=$field['name']?></th>
+            <?php endforeach?>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <?php foreach($entities as $entity):?>
+            <tr>
+                <td><?=$entity['id']?></td>
+                <?php foreach($fields as $key=>$field):?>
+                <td><?=$entity[$key]?></td>
+                <?php endforeach?>
+                <td>
+                    <?php if ($user_profile == 1):?>
+                    <a href="/backend/<?=$module?>/edit?id=<?=$entity['id']?>" class="btn btn-success btn-xs btn-block">Editar</a>
+                    <a href="/backend/<?=$module?>/delete?id=<?=$entity['id']?>" class="btn btn-danger btn-xs btn-block">Eliminar</a>
+                    <?php endif ?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+
+    // $(".liberar_ambulancia").on("click", function(e){
+    //   var btn = $(this)
+    //   var cliente_seteado = btn.data("cliente-seteado") == "1"
+    //   var user_id = "<?= $_SESSION['selectedCliente']['id'] ?>"
+
+    //   if (cliente_seteado == false) {
+    //     alert("debe seleccionar un cliente antes de asignarle una ambulancia")
+    //     return
+    //   }
+
+    //   $.ajax({
+    //     url: "/backend/persona/asignarAmbulancia",
+    //     type: "POST",
+    //     dataType:'json',
+    //     data: { user_id: user_id},
+    //     success: function(response){
+    //       console.log(response)
+    //       window.location = response['alert_param'];
+    //     }
+    //   });
+
+    // })
+
+
+</script>
