@@ -1,0 +1,6 @@
+admin: 18456741
+gerente: 17235461
+secretaria: 12354655
+cliente: 15346572
+
+passowrd: 1 (para todos)
