@@ -1,1 +1,1 @@
-<h1>Agendamineto de atenciones de abogados</h1>
+<h1>Agendamiento de atenciones de abogados</h1>
