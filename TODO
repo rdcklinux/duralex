@@ -1,0 +1,4 @@
+- validar el rut con digito verificador en:
+   login (ingreso con digito verificador)
+   crear, editar Usuario
+ - validaciones de campos.
