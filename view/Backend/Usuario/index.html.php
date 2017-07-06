@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         <?php foreach($entities as $entity):?>
-            <?php if($entity['gestor'] && $user_profile == 3) continue;?>
+            <?php if($entity['gestor'] && in_array($user_profile,[3,2])) continue;?>
         <tr>
             <td><?=$entity['id']?></td>
             <?php foreach($fields as $key=>$field):?>

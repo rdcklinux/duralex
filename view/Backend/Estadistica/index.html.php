@@ -1,5 +1,9 @@
 <div id="graficos" class="container">
   <div class="row">
+    <div class="col-md-6"> <a href="/backend/estadistica/atenciones" class="btn btn-default">Ver Reporte de Atenciones</a></div>
+  </div>
+  <div class="row"><div class="col-md-12"><h2>Reporte de Clientes</h2></div></div>
+  <div class="row">
     <div class="col-md-6">
       <div class="Panel with panel-primary class">
            <div style="background-color: #003399;" class="panel-heading">

@@ -29,6 +29,7 @@ class UsuarioController extends CrudController {
         'fecha_incorporacion'=>['name'=>'Fecha Incorporacion','type'=>'text'],
         'telefonos'=>['name'=>'Telefonos','type'=>'text'],
         'direccion'=>['name'=>'Direccion','type'=>'text'],
+        'perfil'=>['name'=>'Perfil','type'=>'select']
     ];
 
     protected $messages = [
@@ -39,6 +40,13 @@ class UsuarioController extends CrudController {
     protected $tipo_persona = [
         1=>'Juridica',
         2=>'Natural',
+    ];
+
+    protected $perfil = [
+        0=>'Cliente',
+        1=>'Administrador',
+        2=>'Gerente',
+        3=>'Secretaria',
     ];
 
     function __construct(){
@@ -53,6 +61,7 @@ class UsuarioController extends CrudController {
       $action = parent::indexAction();
       foreach($action['entities'] as $entity) {
           $entity['tipo_persona'] = $this->tipo_persona[$entity['tipo_persona']];
+          $entity['perfil'] = $this->perfil[$entity['perfil']];
           $entities[] = $entity;
       }
       $action['entities'] = $entities;
