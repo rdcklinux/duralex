@@ -41,6 +41,7 @@ class AppKernel {
     if(!empty($action)){
         extract($action);
     }
+    if($_view) $this->action = $_view;
     $this->view = "../view/$this->module/$this->controller/$this->action.html.php";
     $render = $this->view;
     if(isset($this->template)){

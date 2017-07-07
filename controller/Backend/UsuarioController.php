@@ -124,8 +124,8 @@ class UsuarioController extends CrudController {
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
         }
         $rut = $this->entity->validateRut($_POST['entity']['rut']);
-        $valid = $rut;
-
+        $e = $_POST['entity'];
+        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['tipo_persona'] && $e['fecha_incorporacion'] && $e['telefonos'] && $e['direccion'] && $e['perfil']);
         if(!$valid){
             $action = $this->editAction();
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
@@ -134,6 +134,8 @@ class UsuarioController extends CrudController {
             unset($_POST['entity']['tipo_persona'], $_POST['entity']['perfil']);
 
             $action['entity'] = array_merge($action['entity'],$_POST['entity']);
+            $action['entity']['id'] = $_GET['id'];
+            $_SESSION['error'] = 'Los datos ingresados no son válidos';
             return $action;
         }
 
@@ -149,12 +151,17 @@ class UsuarioController extends CrudController {
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
         }
         $rut = $this->entity->validateRut($_POST['entity']['rut']);
-        $valid = $rut;
-
+        $e = $_POST['entity'];
+        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['tipo_persona'] && $e['fecha_incorporacion'] && $e['telefonos'] && $e['direccion'] && $e['perfil']);
         if(!$valid){
             $action = $this->editAction();
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
-            $action['entity'] = $_POST['entity'];
+            $action['entity']['tipo_persona']['selected'] = (int)$_POST['entity']['tipo_persona'];
+            $action['entity']['perfil']['selected'] = (int)$_POST['entity']['perfil'];
+            unset($_POST['entity']['tipo_persona'], $_POST['entity']['perfil']);
+
+            $action['entity'] = array_merge($action['entity'],$_POST['entity']);
+            $_SESSION['error'] = 'Los datos ingresados no son válidos';
             return $action;
         }
         $_POST['entity']['rut']=$rut;

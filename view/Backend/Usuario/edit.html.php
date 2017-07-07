@@ -1,8 +1,5 @@
 <h1><?=$vtitle?></h1>
-<?php if($_SESSION['message']):?>
-    <p class="alert alert-success"><?=$_SESSION['message']?></p>
-    <?php unset($_SESSION['message']) ?>
-<?php endif ?>
+<?php include('../view/Layout/flash.html.php'); ?>
 <form class="form" action="/backend/<?=$module?>/<?=$method?$method:"save?id=$entity[id]"?>" method="post">
 <table class="table">
     <?php foreach ($fields as $key => $field):?>

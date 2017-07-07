@@ -22,7 +22,7 @@ class AbogadoController extends CrudController {
         'nombre'=>['name'=>'Nombre','type'=>'text'],
         'apellido'=>['name'=>'Apellido','type'=>'text'],
         'especialidad'=>['name'=>'Especialidad','type'=>'text'],
-        'valorhora'=>['name'=>'Valor Hora','type'=>'number'],
+        'valor_hora'=>['name'=>'Valor Hora','type'=>'number'],
     ];
     protected $messages = [
         'save'=>'Abogado guardado con exito',
@@ -30,7 +30,6 @@ class AbogadoController extends CrudController {
     ];
 
     function __construct(){
-        //if(!$_SESSION['user']['gestor']) $this->redirect('/backend/client/home');
         $this->entity = new \Model\Entity\Abogado;
     }
 
@@ -53,13 +52,30 @@ class AbogadoController extends CrudController {
         return $action;
     }
 
+    function saveAction(){
+        $rut = (new \Model\Entity\Usuario)->validateRut($_POST['entity']['rut']);
+        $e = $_POST['entity'];
+        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['especialidad'] && $e['valor_hora']);
+        if(!$valid) {
+            $action = $this->editAction();
+            $action['entity'] = $_POST['entity'];
+            $action['entity']['id'] = $_GET['id'];
+            $_SESSION['error'] = 'Los datos ingresados no son válidos';
+            $action['_view'] = 'edit';
+            return $action;
+        }
+        $_POST['entity']['rut']=$rut;
+        parent::saveAction();
+    }
+
     function createAction(){
         $rut = (new \Model\Entity\Usuario)->validateRut($_POST['entity']['rut']);
-        $valid = $rut;
-
+        $e = $_POST['entity'];
+        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['especialidad'] && $e['valor_hora']);
         if(!$valid){
             $action = $this->editAction();
             $action['entity'] = $_POST['entity'];
+            $_SESSION['error'] = 'Los datos ingresados no son válidos';
             return $action;
         }
         $_POST['entity']['rut']=$rut;
