@@ -77,8 +77,8 @@ class AbogadoController extends CrudController {
             $action = $this->editAction();
             $action['entity'] = $_POST['entity'];
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
-            $action['_view'] = 'edit';
-            
+            $action['_view'] = 'new';
+
             return $action;
         }
         $_POST['entity']['rut']=$rut;

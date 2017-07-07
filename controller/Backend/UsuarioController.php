@@ -99,7 +99,7 @@ class UsuarioController extends CrudController {
             $tipo_options[]=['id'=>(int)$id, 'name'=>$option];
         }
         $action['entity']['tipo_persona'] = [
-            'selected'=> (int)$action['entity']['tipo_persona'],
+            'selected'=> (int)@$action['entity']['tipo_persona'],
             'options'=>$tipo_options,
         ];
 
@@ -107,11 +107,11 @@ class UsuarioController extends CrudController {
             $perfil_options[]=['id'=>(int)$id, 'name'=>$option];
         }
         $action['entity']['perfil'] = [
-            'selected'=> (int)$action['entity']['perfil'],
+            'selected'=> (int)@$action['entity']['perfil'],
             'options'=>$perfil_options,
         ];
-        $dv = $this->entity->getDV($action['entity']['rut']);
-        $action['entity']['rut'] = $action['entity']['rut'] . '-' . $dv;
+        $dv = $this->entity->getDV(@$action['entity']['rut']);
+        $action['entity']['rut'] = @$action['entity']['rut'] . '-' . $dv;
 
         return $action;
     }
@@ -125,7 +125,7 @@ class UsuarioController extends CrudController {
         }
         $rut = $this->entity->validateRut($_POST['entity']['rut']);
         $e = $_POST['entity'];
-        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['tipo_persona'] && $e['fecha_incorporacion'] && $e['telefonos'] && $e['direccion'] && $e['perfil']);
+        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['tipo_persona'] && $e['fecha_incorporacion'] && $e['telefonos'] && $e['direccion'] && empty($e['perfil']));
         if(!$valid){
             $action = $this->editAction();
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
@@ -134,7 +134,7 @@ class UsuarioController extends CrudController {
             unset($_POST['entity']['tipo_persona'], $_POST['entity']['perfil']);
 
             $action['entity'] = array_merge($action['entity'],$_POST['entity']);
-            $action['entity']['id'] = $_GET['id'];
+            $action['entity']['id'] = (int)@$_GET['id'];
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
             $action['_view'] = 'edit';
 
@@ -154,7 +154,7 @@ class UsuarioController extends CrudController {
         }
         $rut = $this->entity->validateRut($_POST['entity']['rut']);
         $e = $_POST['entity'];
-        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['tipo_persona'] && $e['fecha_incorporacion'] && $e['telefonos'] && $e['direccion'] && $e['perfil']);
+        $valid = ($rut && $e['nombre'] && $e['apellido'] && $e['tipo_persona'] && $e['fecha_incorporacion'] && $e['telefonos'] && $e['direccion'] && empty($e['perfil']));
         if(!$valid){
             $action = $this->editAction();
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
@@ -164,7 +164,7 @@ class UsuarioController extends CrudController {
 
             $action['entity'] = array_merge($action['entity'],$_POST['entity']);
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
-            $action['_view'] = 'edit';
+            $action['_view'] = 'new';
 
             return $action;
         }

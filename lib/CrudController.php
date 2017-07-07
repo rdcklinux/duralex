@@ -18,7 +18,7 @@ class CrudController extends Controller {
 
     ///@GET
     function editAction(){
-        $id = (int)$_GET['id'];
+        $id = (int)@$_GET['id'];
         $entity = $this->entity->select('*', "id=$id")->fetch();
         return [
             'entity'=>$entity,
@@ -41,7 +41,7 @@ class CrudController extends Controller {
 
     //@POST
     function saveAction(){
-        $id = (int)$_GET['id'];
+        $id = (int)@$_GET['id'];
         $data = $_POST['entity'];
         $this->entity->update($id, $data);
         $_SESSION['message'] = $this->messages['save'];
@@ -58,7 +58,7 @@ class CrudController extends Controller {
     }
     //@GET
     function deleteAction(){
-        $id = (int)$_GET['id'];
+        $id = (int)@$_GET['id'];
         $this->entity->delete($id);
         $this->redirect($this->route['index']);
     }

@@ -132,7 +132,7 @@ class AtencionController extends CrudController {
             $action['entity'] = array_merge($action['entity'],$_POST['entity']);
             $action['entity']['id'] = $_GET['id'];
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
-            $action['_view'] = 'edit';
+            $action['_view'] = 'new';
 
             return $action;
         }
