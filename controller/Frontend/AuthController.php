@@ -47,8 +47,12 @@ class AuthController extends Controller {
 
     private function userExists($rut){
         $usuario = new Usuario;
-        $result = $usuario->select('*', "rut='$rut'");
-        return $result->fetch();
+        $rut = $usuario->validateRut($rut);
+        if($rut){
+            $result = $usuario->select('*', "rut='$rut'");
+            return $result->fetch();
+        }
+        return false;
     }
 
 }

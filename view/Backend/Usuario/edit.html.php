@@ -13,11 +13,11 @@
                 <select class="form-control" name="entity[<?=$key?>]" required>
                     <option value="">Seleccione <?=$field['name']?></option>
                     <?php foreach($entity[$key]['options'] as $option):?>
-                        <option value="<?=$option['id']?>" <?=$entity[$key]['selected']==$option['id']?'selected':''?> ><?=$option['name']?></option>
+                        <option value="<?=$option['id']?>" <?=$entity[$key]['selected']===(int)$option['id']?'selected':''?> ><?=$option['name']?></option>
                     <?php endforeach ?>
                 </select>
             <?php else: ?>
-                <input value="<?=$entity[$key]?>" type="<?=$field['type']?>" class="form-control" name="entity[<?=$key?>]">
+                <input value="<?=$entity[$key]?>" type="<?=$field['type']?>" class="form-control <?=$field['class']?>" name="entity[<?=$key?>]">
             <?php endif ?>
         </td>
     </tr>

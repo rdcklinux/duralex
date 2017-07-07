@@ -8,6 +8,7 @@
         <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/dt-1.10.15/datatables.min.css"/>
+        <link rel="stylesheet" href="/css/jquery-ui.css">
     </head>
     <?php
     $user_profile = $_SESSION['user']['perfil'];
@@ -60,15 +61,15 @@
             </div><!-- /.navbar-collapse -->
           </div>
         </nav>
-
+        <div class="container">
+          <?php @include($this->view) ?>
+          <br/>
+        </div>
         <script src="/js/jquery-3.2.1.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
         <script src="/js/datatables.min.js"></script>
         <script src="/js/tables.js"></script>
-
-        <div class="container">
-          <?php @include($this->view) ?>
-          <br><br><br>
-        </div>
+        <script src="/js/jquery-ui.js"></script>
+        <script>$(function(){$(".datepicker").datepicker({'dateFormat':'yy-mm-dd'});});</script>
     </body>
 </html>

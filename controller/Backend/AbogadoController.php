@@ -33,25 +33,36 @@ class AbogadoController extends CrudController {
         //if(!$_SESSION['user']['gestor']) $this->redirect('/backend/client/home');
         $this->entity = new \Model\Entity\Abogado;
     }
-    /*
+
     function indexAction(){
-        $action = parent::indexAction();
-        $action['entities'] = $this->entity->getAllWithPerson();
-        $append = [
-            'rut'=>['name'=>'Rut paciente'],
-            'nombre'=>['name'=>'Nombre paciente'],
-            'apellido'=>['name'=>'Apellido paciente'],
-        ];
-        $action['fields'] += $append;
+      $action = parent::indexAction();
+      foreach($action['entities'] as $entity) {
+          $dv = (new \Model\Entity\Usuario)->getDV($entity['rut']);
+          $entity['rut'] = $entity['rut'] . '-' . $dv;
+          $entities[] = $entity;
+      }
+      $action['entities'] = $entities;
+      return $action;
+    }
+
+    function editAction(){
+        $action = parent::editAction();
+        $dv = (new \Model\Entity\Usuario)->getDV($action['entity']['rut']);
+        $action['entity']['rut'] = $action['entity']['rut'] . '-' . $dv;
 
         return $action;
     }
 
-    function releaseAction(){
-      $id = (int)$this->get('id');
-      $this->entity->release($id);
+    function createAction(){
+        $rut = (new \Model\Entity\Usuario)->validateRut($_POST['entity']['rut']);
+        $valid = $rut;
 
-      $this->redirect("/backend/ambulancia?alert=liberada");
+        if(!$valid){
+            $action = $this->editAction();
+            $action['entity'] = $_POST['entity'];
+            return $action;
+        }
+        $_POST['entity']['rut']=$rut;
+        parent::createAction();
     }
-    */
 }

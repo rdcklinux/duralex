@@ -39,4 +39,36 @@ class Usuario extends Repository {
     			   GROUP BY u.id";
     return $this->customQuery($sql);
   }
+
+  function getDV($number){
+      $x=9;$t=0;
+      foreach(str_split(strrev($number)) as $digit) {
+          $t+=$digit*$x;
+          $x=($x==4)?9:$x-1;
+      }
+      $r = ($t % 11);
+      $dv=($r==10)?"K":$r;
+
+      return $dv;
+  }
+
+  function validateRut($rut){
+    if (!preg_match('/^[0-9]{1,2}\.?[0-9]{3}\.?[0-9]{3}\-[0-9kK]{1}$/',$rut) ){
+        return false;
+    }
+    list($number, $verifier_digit) = explode('-',strtoupper($rut), 2);
+    $number = str_replace('.', '', $number);
+    $x=9;$t=0;
+    foreach(str_split(strrev($number)) as $digit) {
+        $t+=$digit*$x;
+        $x=($x==4)?9:$x-1;
+    }
+    $r = ($t % 11);
+    $dv=($r==10)?"K":$r;
+    if( $verifier_digit != $dv ) return false;
+
+    //is valid
+    return $number;
+  }
+
 }

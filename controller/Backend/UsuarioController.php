@@ -26,7 +26,7 @@ class UsuarioController extends CrudController {
         'nombre'=>['name'=>'Nombre','type'=>'text'],
         'apellido'=>['name'=>'Apellido','type'=>'text'],
         'tipo_persona'=>['name'=>'Tipo Persona','type'=>'select'],
-        'fecha_incorporacion'=>['name'=>'Fecha Incorporacion','type'=>'text'],
+        'fecha_incorporacion'=>['name'=>'Fecha Incorporacion','type'=>'text', 'class'=>'datepicker'],
         'telefonos'=>['name'=>'Telefonos','type'=>'text'],
         'direccion'=>['name'=>'Direccion','type'=>'text'],
         'perfil'=>['name'=>'Perfil','type'=>'select']
@@ -62,22 +62,57 @@ class UsuarioController extends CrudController {
       foreach($action['entities'] as $entity) {
           $entity['tipo_persona'] = $this->tipo_persona[$entity['tipo_persona']];
           $entity['perfil'] = $this->perfil[$entity['perfil']];
+
+          $dv = $this->entity->getDV($entity['rut']);
+          $entity['rut'] = $entity['rut'] . '-' . $dv;
           $entities[] = $entity;
       }
       $action['entities'] = $entities;
       return $action;
     }
 
+    function newAction(){
+        $action = parent::newAction();
+        foreach ($this->tipo_persona as $id => $option) {
+            $tipo_options[]=['id'=>(int)$id, 'name'=>$option];
+        }
+        $action['entity']['tipo_persona'] = [
+            'selected'=> null,
+            'options'=>$tipo_options,
+        ];
+
+        foreach ($this->perfil as $id => $option) {
+            $perfil_options[]=['id'=>(int)$id, 'name'=>$option];
+        }
+        $action['entity']['perfil'] = [
+            'selected'=> null,
+            'options'=>$perfil_options,
+        ];
+
+        return $action;
+    }
+
     function editAction(){
         $action = parent::editAction();
         $action['entity']['password']='';
         foreach ($this->tipo_persona as $id => $option) {
-            $tipo_options[]=['id'=>$id, 'name'=>$option];
+            $tipo_options[]=['id'=>(int)$id, 'name'=>$option];
         }
         $action['entity']['tipo_persona'] = [
-            'selected'=> $action['entity']['tipo_persona'],
+            'selected'=> (int)$action['entity']['tipo_persona'],
             'options'=>$tipo_options,
         ];
+
+        foreach ($this->perfil as $id => $option) {
+            $perfil_options[]=['id'=>(int)$id, 'name'=>$option];
+        }
+        $action['entity']['perfil'] = [
+            'selected'=> (int)$action['entity']['perfil'],
+            'options'=>$perfil_options,
+        ];
+        $dv = $this->entity->getDV($action['entity']['rut']);
+        $action['entity']['rut'] = $action['entity']['rut'] . '-' . $dv;
+
         return $action;
     }
 
@@ -88,10 +123,23 @@ class UsuarioController extends CrudController {
         } else {
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
         }
+        $rut = $this->entity->validateRut($_POST['entity']['rut']);
+        $valid = $rut;
 
+        if(!$valid){
+            $action = $this->editAction();
+            unset($_POST['entity']['password'], $_POST['entity']['r_password']);
+            $action['entity']['tipo_persona']['selected'] = (int)$_POST['entity']['tipo_persona'];
+            $action['entity']['perfil']['selected'] = (int)$_POST['entity']['perfil'];
+            unset($_POST['entity']['tipo_persona'], $_POST['entity']['perfil']);
+
+            $action['entity'] = array_merge($action['entity'],$_POST['entity']);
+            return $action;
+        }
+
+        $_POST['entity']['rut']=$rut;
         parent::saveAction();
     }
-
 
     function createAction(){
         if($_POST['entity']['password'] == $_POST['entity']['r_password'] && !empty($_POST['entity']['password'])){
@@ -100,44 +148,16 @@ class UsuarioController extends CrudController {
         } else {
             unset($_POST['entity']['password'], $_POST['entity']['r_password']);
         }
+        $rut = $this->entity->validateRut($_POST['entity']['rut']);
+        $valid = $rut;
 
+        if(!$valid){
+            $action = $this->editAction();
+            unset($_POST['entity']['password'], $_POST['entity']['r_password']);
+            $action['entity'] = $_POST['entity'];
+            return $action;
+        }
+        $_POST['entity']['rut']=$rut;
         parent::createAction();
     }
-    /*
-    function setSelectedClientAction(){
-        // Asigna un cliente 'seleccionado' a una variable de sesion, para que cuando queramos asignar una ambulancia ya sepamos a quien le pertenecera
-        $rut = $this->post('rut');
-        // ############### MEJORAR SEGURIDAD EVITANDO INJECCION SQL!!! #######
-        $query = "select * from persona where rut = '$rut' and cliente = 1 and activo = 1;";
-        $cliente = (new Usuario)->customQuery($query)-> fetch();
-        if ($cliente == false) {
-          unset($_SESSION['selectedCliente']);
-          echo json_encode(['success'=> false, 'alert_param'=>'?alert=rut_no_encontrado']); exit;
-        }
-        $_SESSION['selectedCliente']= $cliente;
-        echo json_encode(['cliente'=> $cliente, 'alert_param'=>'?alert=cliente_seleccionado', 'success'=> true]); exit;
-
-    }
-
-    function asignarAmbulanciaAction(){
-      $user_id = $this->post('user_id');
-      $query_ambulancias_libres = "select * from ambulancia where persona_id is null limit 1;";
-      $ambulancia = (new Ambulancia)->customQuery($query_ambulancias_libres)->fetch();
-      $ambulancia_id = $ambulancia['id'];
-      if ($ambulancia == false) {
-        echo json_encode(['success'=> false, 'alert_param'=>'?alert=sin_ambulancias_libres']); exit;
-      }
-      $query_usario_con_ambulancia = "select * from ambulancia where persona_id = $user_id limit 1;";
-      $ya_tiene_ambulancia = (new Ambulancia)->customQuery($query_usario_con_ambulancia)->fetch();
-
-      if ($ya_tiene_ambulancia != false) {
-        echo json_encode(['success'=> false, 'alert_param'=>'?alert=ambulancia_ya_asignada']); exit;
-      }
-
-      $query_asignar_ambulancia = "update ambulancia set persona_id = $user_id where id = $ambulancia_id;";
-      $ambulancia = (new Ambulancia)->customQuery($query_asignar_ambulancia);
-      echo json_encode(['success'=> true, 'alert_param'=>'?alert=ambulancia_asignada', "ambulancia_id"=> $ambulancia_id]); exit;
-
-    }
-    */
 }
