@@ -1,4 +1,8 @@
 - validar el rut con digito verificador en:
-   login (ingreso con digito verificador) OK
-   crear, editar Usuario OK
-- validaciones de campos.
+   - login (ingreso con digito verificador) OK
+   - crear, editar Usuario OK
+   - crear, editar Abogado OK
+- validaciones de campos:
+   - usuario OK
+   - abogado OK
+   - atenciones
