@@ -5,7 +5,7 @@
     <?php foreach ($fields as $key => $field):?>
     <tr>
         <td><?=$field['name']?></td>
-        <td><input value="<?=$entity[$key]?>" type="<?=$field['type']?>" class="form-control" name="entity[<?=$key?>]"></td>
+        <td><input value="<?=$entity[$key]?>" type="<?=$field['type']?>" class="form-control <?=$field['class']?>" name="entity[<?=$key?>]"></td>
     </tr>
     <?php endforeach ?>
 </table>

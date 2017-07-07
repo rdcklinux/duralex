@@ -18,7 +18,7 @@ class AtencionController extends CrudController {
         'new'=>'Nueva Atencion',
     ];
     protected $fields = [
-        'fechayhora'=>['name'=>'Fecha y Hora','type'=>'text'],
+        'fechayhora'=>['name'=>'Fecha y Hora','type'=>'text', 'class'=>"datetimepicker"],
         'usuario_id'=>['name'=>'Cliente','type'=>'select'],
         'abogado_id'=>['name'=>'Abogado','type'=>'select'],
         'estado'=>['name'=>'Estado','type'=>'select'],
@@ -75,6 +75,7 @@ class AtencionController extends CrudController {
             'abogado_id' => [
                 'options'=>(new Abogado)->getAsOptions(),
             ],
+            /*
             'estado'=> [
                 'options'=>[
                     ['id'=>1, 'name'=>'Agendada'],
@@ -83,29 +84,71 @@ class AtencionController extends CrudController {
                     ['id'=>4, 'name'=>'perdida'],
                     ['id'=>5, 'name'=>'realizada'],
                 ],
-            ]
+            ]*/
         ];
         return $action;
     }
 
     function editAction(){
         $action = parent::editAction();
-        //echo "<pre>";print_r($action); exit;
         $action['entity']['usuario_id'] = [
-            'selected'=> $action['entity']['usuario_id'],
+            'selected'=> (int)$action['entity']['usuario_id'],
             'options'=>(new Usuario)->getClients(),
         ];
         $action['entity']['abogado_id'] = [
-            'selected'=> $action['entity']['abogado_id'],
+            'selected'=> (int)$action['entity']['abogado_id'],
             'options'=>(new Abogado)->getAsOptions(),
         ];
         foreach ($this->status as $id => $option) {
-            $estatus_options[]=['id'=>$id, 'name'=>$option];
+            $estatus_options[]=['id'=>(int)$id, 'name'=>$option];
         }
         $action['entity']['estado'] = [
-            'selected'=> $action['entity']['estado'],
+            'selected'=> (int)$action['entity']['estado'],
             'options'=>$estatus_options,
         ];
         return $action;
     }
+
+    function saveAction(){
+        $e = $_POST['entity'];
+        $valid = ($e['fechayhora'] && $e['usuario_id'] && $e['abogado_id'] && $e['estado']);
+        if(!$valid) {
+            $action = $this->editAction();
+            $action['entity']['usuario_id']['selected'] = (int)$_POST['entity']['usuario_id'];
+            $action['entity']['abogado_id']['selected'] = (int)$_POST['entity']['abogado_id'];
+            $action['entity']['estado']['selected'] = (int)$_POST['entity']['estado'];
+
+            unset($_POST['entity']['usuario_id'], $_POST['entity']['abogado_id'], $_POST['entity']['estado']);
+
+            $action['entity'] = array_merge($action['entity'],$_POST['entity']);
+            $action['entity']['id'] = $_GET['id'];
+            $_SESSION['error'] = 'Los datos ingresados no son válidos';
+            $action['_view'] = 'edit';
+
+            return $action;
+        }
+        parent::saveAction();
+    }
+
+    function createAction(){
+        $e = $_POST['entity'];
+        $valid = ($e['fechayhora'] && $e['usuario_id'] && $e['abogado_id']);
+        if(!$valid){
+            $action = $this->editAction();
+            $action['entity']['usuario_id']['selected'] = (int)$_POST['entity']['usuario_id'];
+            $action['entity']['abogado_id']['selected'] = (int)$_POST['entity']['abogado_id'];
+
+            unset($_POST['entity']['usuario_id'], $_POST['entity']['abogado_id']);
+
+            $action['entity'] = array_merge($action['entity'],$_POST['entity']);
+            $action['entity']['id'] = $_GET['id'];
+            $_SESSION['error'] = 'Los datos ingresados no son válidos';
+            $action['_view'] = 'edit';
+
+            return $action;
+        }
+        $_POST['entity']['estado'] = 1;
+        parent::createAction();
+    }
+
 }

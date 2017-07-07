@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/dt-1.10.15/datatables.min.css"/>
         <link rel="stylesheet" href="/css/jquery-ui.css">
+        <link rel="stylesheet" href="/css/jquery-ui-timepicker-addon.css">
     </head>
     <?php
     $user_profile = $_SESSION['user']['perfil'];
@@ -70,6 +71,12 @@
         <script src="/js/datatables.min.js"></script>
         <script src="/js/tables.js"></script>
         <script src="/js/jquery-ui.js"></script>
-        <script>$(function(){$(".datepicker").datepicker({'dateFormat':'yy-mm-dd'});});</script>
+        <script src="/js/jquery-ui-timepicker-addon.js"></script>
+        <script>
+            $(function(){
+                $(".datepicker").datepicker({'dateFormat':'yy-mm-dd'});
+                $(".datetimepicker").datetimepicker({'dateFormat':'yy-mm-dd'});
+            });
+        </script>
     </body>
 </html>

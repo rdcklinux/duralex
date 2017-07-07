@@ -136,6 +136,8 @@ class UsuarioController extends CrudController {
             $action['entity'] = array_merge($action['entity'],$_POST['entity']);
             $action['entity']['id'] = $_GET['id'];
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
+            $action['_view'] = 'edit';
+            
             return $action;
         }
 
@@ -162,6 +164,8 @@ class UsuarioController extends CrudController {
 
             $action['entity'] = array_merge($action['entity'],$_POST['entity']);
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
+            $action['_view'] = 'edit';
+
             return $action;
         }
         $_POST['entity']['rut']=$rut;
