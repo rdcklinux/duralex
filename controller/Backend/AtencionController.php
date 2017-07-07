@@ -24,8 +24,8 @@ class AtencionController extends CrudController {
         'estado'=>['name'=>'Estado','type'=>'select'],
     ];
     protected $messages = [
-        'save'=>'Abogado guardado con exito',
-        'create'=>'Abogado creado con exito',
+        'save'=>'Atención guardada con éxito',
+        'create'=>'Atención creada con éxito',
     ];
 
     protected $status = [
@@ -37,7 +37,6 @@ class AtencionController extends CrudController {
     ];
 
     function __construct(){
-        //if(!$_SESSION['user']['gestor']) $this->redirect('/backend/client/home');
         $this->entity = new \Model\Entity\Atencion;
     }
 
@@ -75,16 +74,6 @@ class AtencionController extends CrudController {
             'abogado_id' => [
                 'options'=>(new Abogado)->getAsOptions(),
             ],
-            /*
-            'estado'=> [
-                'options'=>[
-                    ['id'=>1, 'name'=>'Agendada'],
-                    ['id'=>2, 'name'=>'Confirmada'],
-                    ['id'=>3, 'name'=>'Anulada'],
-                    ['id'=>4, 'name'=>'perdida'],
-                    ['id'=>5, 'name'=>'realizada'],
-                ],
-            ]*/
         ];
         return $action;
     }

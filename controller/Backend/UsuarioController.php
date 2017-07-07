@@ -33,8 +33,8 @@ class UsuarioController extends CrudController {
     ];
 
     protected $messages = [
-        'save'=>'Usuario guardada con exito',
-        'create'=>'Usuario creada con exito',
+        'save'=>'Usuario guardado con éxito',
+        'create'=>'Usuario creado con éxito',
     ];
 
     protected $tipo_persona = [
@@ -137,7 +137,7 @@ class UsuarioController extends CrudController {
             $action['entity']['id'] = $_GET['id'];
             $_SESSION['error'] = 'Los datos ingresados no son válidos';
             $action['_view'] = 'edit';
-            
+
             return $action;
         }
 
